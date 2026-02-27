@@ -8,6 +8,6 @@ class Todo {
   @override
   String toString() {
     // cocncatenates `name` and `description` properties together
-    return "$name - ($description)";
+    return "+ $name - ($description)";
   }
 }
