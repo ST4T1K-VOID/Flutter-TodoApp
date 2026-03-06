@@ -1,10 +1,14 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import './Todo.dart';
+import './todo.dart';
 
 class TodoList extends ChangeNotifier {
-  final List<Todo> _todos = [];
+  final List<Todo> _todos = [
+    Todo(name: "Shopping", description: "Pick up groceries"),
+    Todo(name: "Paint", description: "Recreate the Mona Lisa", complete: true),
+    Todo(name: "Dance", description: "I wanna dance with somebody"),
+  ];
 
   //getters
 
@@ -20,7 +24,11 @@ class TodoList extends ChangeNotifier {
   }
 
   void updateTodo(Todo todo) {
-    int todoindex = _todos.indexOf(todo);
+    Todo listTodo = _todos.firstWhere((t) => t.name == todo.name);
+    print(listTodo);
+
+    int todoindex = _todos.indexOf(listTodo);
+    print(todoindex);
     _todos[todoindex] = todo;
     // _todos.replaceRange(todoindex, todoindex, [todo]);
     notifyListeners();

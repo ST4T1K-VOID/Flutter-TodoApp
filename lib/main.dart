@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/views/todo_widget.dart';
+import 'package:provider/provider.dart';
+import './models/todo_list.dart';
 import './models/todo.dart';
 
 void main() {
-  runApp(TodoApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => TodoList(),
+      child: const TodoApp(),
+    ),
+  );
 }
 
 class TodoApp extends StatelessWidget {
@@ -29,18 +37,11 @@ class _TodoHomePageState extends State<TodoHomePage> {
   final TextEditingController _controlName = TextEditingController();
   final TextEditingController _controlDescription = TextEditingController();
 
-  //todo data
-  final List<Todo> todos = <Todo>[
-    Todo(name: "Shopping", description: "Pick up groceries"),
-    Todo(name: "Paint", description: "Recreate the Mona Lisa"),
-    Todo(name: "Dance", description: "I wanna dance with somebody"),
-  ];
-
   //add todo pop-up form
   _openAddTodo() {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return AlertDialog(
           content: Column(
             spacing: 10,
@@ -55,7 +56,8 @@ class _TodoHomePageState extends State<TodoHomePage> {
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      todos.add(
+                      //???????
+                      TodoList().add(
                         Todo(
                           name: _controlName.text,
                           description: _controlDescription.text,
@@ -80,31 +82,29 @@ class _TodoHomePageState extends State<TodoHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _openAddTodo,
         child: Icon(Icons.add),
-        backgroundColor: Colors.blueGrey[100],
       ),
       appBar: AppBar(
-        title: Text('TODO APPBAR'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("TODOist"),
+            Consumer<TodoList>(
+              builder: (context, model, child) => (Text(
+                "Remaining todos: ${model.todos.where((todo) => todo.complete == false).length}",
+              )),
+            ),
+          ],
+        ),
         backgroundColor: Colors.blueGrey[400],
       ),
       body: Center(
-        child: ListView.builder(
-          itemCount: todos.length,
-          itemBuilder: (BuildContext context, int i) {
-            return Container(
-              margin: EdgeInsets.all(5),
-              padding: const EdgeInsets.fromLTRB(20, 10, 5, 10),
-              decoration: BoxDecoration(
-                color: Colors.blueGrey[100],
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 3),
-                    blurRadius: 2.0,
-                    blurStyle: BlurStyle.solid,
-                    color: const Color.fromARGB(128, 63, 84, 95),
-                  ),
-                ],
-              ),
-              child: Text(style: TextStyle(fontSize: 24), todos[i].toString()),
+        child: Consumer<TodoList>(
+          builder: (context, model, child) {
+            return ListView.builder(
+              itemCount: model.todoCount,
+              itemBuilder: (BuildContext context, int i) {
+                return TodoWidget(todo: model.todos[i]);
+              },
             );
           },
         ),
