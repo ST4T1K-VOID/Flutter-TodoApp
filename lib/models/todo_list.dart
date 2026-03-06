@@ -25,10 +25,9 @@ class TodoList extends ChangeNotifier {
 
   void updateTodo(Todo todo) {
     Todo listTodo = _todos.firstWhere((t) => t.name == todo.name);
-    print(listTodo);
 
     int todoindex = _todos.indexOf(listTodo);
-    print(todoindex);
+
     _todos[todoindex] = todo;
     // _todos.replaceRange(todoindex, todoindex, [todo]);
     notifyListeners();
