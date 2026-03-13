@@ -24,7 +24,7 @@ class _TodoWidgetState extends State<TodoWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.todo.name, style: TextStyle(fontSize: 30)),
+                Text(widget.todo.id, style: TextStyle(fontSize: 30)),
                 Checkbox(
                   value: widget.todo.complete,
                   onChanged: (value) {

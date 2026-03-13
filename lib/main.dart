@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/views/todo_widget.dart';
+import 'package:flutter_todo/services/sqlite_datasource.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+
 import './models/todo_list.dart';
 import './models/todo.dart';
+import './services/datasource.dart';
+import './views/todo_widget.dart';
 
 void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => TodoList(),
-      child: const TodoApp(),
+  WidgetsFlutterBinding.ensureInitialized();
+  Get.putAsync<IDataSource>(() => SqliteDatasource.createAsync()).whenComplete(
+    () => runApp(
+      ChangeNotifierProvider(
+        create: (context) => TodoList(),
+        child: const TodoApp(),
+      ),
     ),
   );
 }
@@ -100,10 +107,25 @@ class _TodoHomePageState extends State<TodoHomePage> {
       body: Center(
         child: Consumer<TodoList>(
           builder: (context, model, child) {
-            return ListView.builder(
-              itemCount: model.todoCount,
-              itemBuilder: (BuildContext context, int i) {
-                return TodoWidget(todo: model.todos[i]);
+            return FutureBuilder(
+              future: model.refresh(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData &&
+                    snapshot.data != null) {
+                  return ListView.builder(
+                    itemCount: model.todoCount,
+                    itemBuilder: (BuildContext context, int i) {
+                      return TodoWidget(todo: model.todos[i]);
+                    },
+                  );
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Icon(Icons.error));
+                }
+                return Center(
+                  child: CircularProgressIndicator(color: Colors.amber),
+                );
               },
             );
           },
