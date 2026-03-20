@@ -63,7 +63,6 @@ class _TodoHomePageState extends State<TodoHomePage> {
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      //???????
                       TodoList().add(
                         Todo(
                           name: _controlName.text,
@@ -107,26 +106,14 @@ class _TodoHomePageState extends State<TodoHomePage> {
       body: Center(
         child: Consumer<TodoList>(
           builder: (context, model, child) {
-            return FutureBuilder(
-              future: model.refresh(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done &&
-                    snapshot.hasData &&
-                    snapshot.data != null) {
-                  return ListView.builder(
-                    itemCount: model.todoCount,
-                    itemBuilder: (BuildContext context, int i) {
-                      return TodoWidget(todo: model.todos[i]);
-                    },
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Center(child: Icon(Icons.error));
-                }
-                return Center(
-                  child: CircularProgressIndicator(color: Colors.amber),
-                );
-              },
+            return RefreshIndicator(
+              onRefresh: model.refresh,
+              child: ListView.builder(
+                itemCount: model.todoCount,
+                itemBuilder: (BuildContext context, int i) {
+                  return TodoWidget(todo: model.todos[i]);
+                },
+              ),
             );
           },
         ),
