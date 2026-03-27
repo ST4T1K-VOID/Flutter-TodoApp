@@ -24,7 +24,14 @@ class _TodoWidgetState extends State<TodoWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.todo.id, style: TextStyle(fontSize: 30)),
+                Expanded(
+                  child: Text(
+                    widget.todo.name,
+                    style: TextStyle(fontSize: 30),
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                  ),
+                ),
                 Checkbox(
                   value: widget.todo.complete,
                   onChanged: (value) {
@@ -43,20 +50,3 @@ class _TodoWidgetState extends State<TodoWidget> {
     );
   }
 }
-
-// Container(
-//       margin: EdgeInsets.all(5),
-//       padding: const EdgeInsets.fromLTRB(20, 10, 5, 10),
-//       decoration: BoxDecoration(
-//         color: Colors.grey[200],
-//         boxShadow: [
-//           BoxShadow(
-//             offset: Offset(0, 5),
-//             blurRadius: 2.0,
-//             blurStyle: BlurStyle.solid,
-//             color: const Color.fromARGB(128, 94, 94, 94),
-//           ),
-//         ],
-//       ),
-//       child: Text(style: TextStyle(fontSize: 24), widget.todo.toString()),
-//     );

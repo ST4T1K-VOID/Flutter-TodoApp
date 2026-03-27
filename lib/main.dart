@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/services/sqlite_datasource.dart';
+import './services/remote_datasource.dart';
+import './services/sqlite_datasource.dart';
+import './services/hive_datasource.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +12,7 @@ import './views/todo_widget.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.putAsync<IDataSource>(() => SqliteDatasource.createAsync()).whenComplete(
+  Get.putAsync<IDataSource>(() => RemoteDatasource.createAsync()).whenComplete(
     () => runApp(
       ChangeNotifierProvider(
         create: (context) => TodoList(),
@@ -46,6 +48,8 @@ class _TodoHomePageState extends State<TodoHomePage> {
 
   //add todo pop-up form
   _openAddTodo() {
+    _controlName.clear;
+    _controlDescription.clear;
     showDialog(
       context: context,
       builder: (context) {
@@ -96,7 +100,7 @@ class _TodoHomePageState extends State<TodoHomePage> {
             const Text("TODOist"),
             Consumer<TodoList>(
               builder: (context, model, child) => (Text(
-                "Remaining todos: ${model.todos.where((todo) => todo.complete == false).length}",
+                "Remaining todos: ${model.todos.where((todo) => todo.complete == false).length}/${model.todoCount}",
               )),
             ),
           ],
