@@ -32,14 +32,19 @@ class _TodoWidgetState extends State<TodoWidget> {
                     softWrap: false,
                   ),
                 ),
-                Checkbox(
-                  value: widget.todo.complete,
-                  onChanged: (value) {
-                    Provider.of<TodoList>(
-                      context,
-                      listen: false,
-                    ).updateTodo(widget.todo.copyWith(complete: value));
-                  },
+                Column(
+                  children: [
+                    Checkbox(
+                      value: widget.todo.complete,
+                      onChanged: (value) {
+                        Provider.of<TodoList>(
+                          context,
+                          listen: false,
+                        ).updateTodo(widget.todo.copyWith(complete: value));
+                      },
+                    ),
+                    // IconButton(icon: Icon(Icons.delete, color: Colors.red), onPressed: dismiss)
+                  ],
                 ),
               ],
             ),

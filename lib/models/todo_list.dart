@@ -45,6 +45,10 @@ class TodoList extends ChangeNotifier {
     //_todos.removeWhere((item) => item == todo)
 
     _todos.remove(todo);
+
+    IDataSource dataSource = Get.find();
+    dataSource.delete(todo);
+
     notifyListeners();
   }
 

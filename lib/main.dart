@@ -12,7 +12,7 @@ import './views/todo_widget.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Get.putAsync<IDataSource>(() => RemoteDatasource.createAsync()).whenComplete(
+  Get.putAsync<IDataSource>(() => HiveDatasource.createAsync()).whenComplete(
     () => runApp(
       ChangeNotifierProvider(
         create: (context) => TodoList(),
@@ -48,8 +48,6 @@ class _TodoHomePageState extends State<TodoHomePage> {
 
   //add todo pop-up form
   _openAddTodo() {
-    _controlName.clear;
-    _controlDescription.clear;
     showDialog(
       context: context,
       builder: (context) {
@@ -115,7 +113,16 @@ class _TodoHomePageState extends State<TodoHomePage> {
               child: ListView.builder(
                 itemCount: model.todoCount,
                 itemBuilder: (BuildContext context, int i) {
-                  return TodoWidget(todo: model.todos[i]);
+                  return Dismissible(
+                    background: Container(color: Colors.red),
+                    key: UniqueKey(),
+                    child: TodoWidget(todo: model.todos[i]),
+                    onDismissed: (DismissDirection direction) {
+                      setState(() {
+                        model.removeOne(model.todos[i]);
+                      });
+                    },
+                  );
                 },
               ),
             );
