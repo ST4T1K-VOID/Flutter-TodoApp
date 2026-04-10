@@ -1,24 +1,25 @@
-import 'package:flutter/foundation.dart';
-import 'dart:html' as html;
+// import 'package:flutter/foundation.dart';
 
-import './hive_datasource.dart';
-import './sqlite_datasource.dart';
-import './remote_datasource.dart';
-import './datasource.dart';
+// import './hive_datasource.dart';
+// import './sqlite_datasource.dart';
+// import './remote_datasource.dart';
+// import './datasource.dart';
 
-class DataServiceManager {
-  late final IDataSource _local; //set in constructor
-  final IDataSource _remote = RemoteDatasource();
+// //WIP
 
-  DataServiceManager() {
-    if (kIsWeb) {
-      _local = HiveDatasource();
-    } else {
-      _local = SqliteDatasource();
-    }
-  }
+// class DataServiceManager {
+//   late final IDataSource _local; //set in constructor
+//   final IDataSource _remote = RemoteDatasource();
 
-  Future<bool> _isOnline() async {
-    //
-  }
-}
+//   DataServiceManager() {
+//     if (kIsWeb) {
+//       _local = HiveDatasource();
+//     } else {
+//       _local = SqliteDatasource();
+//     }
+//   }
+
+//   // Future<bool> _isOnline() async {
+//   //   //
+//   // }
+// }
